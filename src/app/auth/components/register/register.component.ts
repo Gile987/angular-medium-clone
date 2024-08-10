@@ -11,8 +11,8 @@ import { RegisterRequestInterface } from '../../types/registerRequest.interface'
 import { RouterLink } from '@angular/router';
 import { AuthStateInterface } from '../../types/authState.interface';
 import { Observable } from 'rxjs';
-import { selectIsSubmitting } from '../../store/selectors';
 import { CommonModule } from '@angular/common';
+import { selectIsSubmitting } from '../../store/reducers';
 @Component({
   selector: 'mc-register',
   templateUrl: './register.component.html',
