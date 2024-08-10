@@ -1,27 +1,38 @@
-import { Component } from "@angular/core";
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Store } from "@ngrx/store";
-import { register } from "../../store/actions";
-import { RegisterRequestInterface } from "../../types/registerRequest.interface";
-import { RouterLink } from "@angular/router";
+import { Component } from '@angular/core';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { register } from '../../store/actions';
+import { RegisterRequestInterface } from '../../types/registerRequest.interface';
+import { RouterLink } from '@angular/router';
+import { AuthStateInterface } from '../../types/authState.interface';
+import { Observable } from 'rxjs';
+import { selectIsSubmitting } from '../../store/selectors';
+import { CommonModule } from '@angular/common';
 @Component({
-  selector: "mc-register",
-  templateUrl: "./register.component.html",
+  selector: 'mc-register',
+  templateUrl: './register.component.html',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink]
+  imports: [ReactiveFormsModule, RouterLink, CommonModule],
 })
 export class RegisterComponent {
   form: FormGroup;
+  isSubmitting$: Observable<boolean>;
 
-  // to check out: why can't we use the form before we initialize it in the constructor
-  // https://angular.dev/guide/forms/reactive-forms
-  // check this out under 'alternatively': https://brandonclapp.com/getting-started-with-angular-reactive-forms
-  constructor(private fb: FormBuilder, private store: Store) {
+  constructor(
+    private fb: FormBuilder,
+    private store: Store<{ auth: AuthStateInterface }>
+  ) {
     this.form = this.fb.nonNullable.group({
-      username: ["", [Validators.required, Validators.minLength(3)]],
-      email: ["", [Validators.required, Validators.email]],
-      password: ["", [Validators.required, Validators.minLength(6)]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
+    this.isSubmitting$ = this.store.select(selectIsSubmitting);
   }
 
   onSubmit() {
