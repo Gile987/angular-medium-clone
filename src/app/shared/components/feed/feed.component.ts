@@ -6,11 +6,12 @@ import { selectFeedData, selectIsLoading, selectError } from './store/reducer';
 import { GetFeedResponseInterface } from './types/getFeedResponse.interface';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { ErrorMessageComponent } from '../errorMessage/errorMessage.component';
 @Component({
   selector: 'mc-feed',
   templateUrl: './feed.component.html',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, ErrorMessageComponent],
 })
 export class FeedComponent implements OnInit {
   @Input() apiUrl: string = '';
