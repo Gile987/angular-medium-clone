@@ -1,3 +1,5 @@
+import { ProfileInterface } from './profile.interface';
+
 export interface ArticleInterface {
   title: string;
   description: string;
@@ -8,4 +10,5 @@ export interface ArticleInterface {
   favorited: boolean;
   favoritesCount: number;
   slug: string;
+  author: ProfileInterface;
 }
