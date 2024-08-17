@@ -17,7 +17,7 @@ import { authInterceptor } from './shared/services/authInterceptor';
 import {
   feedFeatureKey,
   feedReducer,
-} from './shared/components/feed/store/reducer';
+} from './shared/components/feed/store/reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
