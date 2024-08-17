@@ -51,7 +51,6 @@ export class FeedComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(feedActions.getFeed({ url: this.apiUrl }));
     this.route.queryParams.subscribe((params) => {
       this.currentPage = Number(params['page'] || '1');
       this.fetchFeed();
