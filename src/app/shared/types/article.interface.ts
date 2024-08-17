@@ -1,10 +1,11 @@
+import { PopularTagType } from './popularTag.type';
 import { ProfileInterface } from './profile.interface';
 
 export interface ArticleInterface {
   title: string;
   description: string;
   body: string;
-  tagList: string[];
+  tagList: PopularTagType[];
   createdAt: string;
   updatedAt: string;
   favorited: boolean;

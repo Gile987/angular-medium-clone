@@ -22,7 +22,7 @@
         <h1>{{ article.title }}</h1>
         <p>{{ article.description }}</p>
         <span>Read More...</span>
-        tag list
+        <mc-tag-list [tags]="article.tagList"></mc-tag-list>
       </a>
     </div>
     <mc-pagination
