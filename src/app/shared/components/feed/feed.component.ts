@@ -58,13 +58,14 @@ export class FeedComponent implements OnInit {
 
   fetchFeed(): void {
     const offset: number = this.currentPage * this.limit - this.limit;
-    const parsedUrl = queryString.parseUrl(this.apiUrl);
-    const stringifiedParams = queryString.stringify({
+    const parsedUrl: { url: string; query: { [key: string]: any } } =
+      queryString.parseUrl(this.apiUrl);
+    const stringifiedParams: string = queryString.stringify({
       limit: this.limit,
       offset,
       ...parsedUrl.query,
     });
-    const apiUrlWithParams = `${parsedUrl.url}?${stringifiedParams}`;
+    const apiUrlWithParams: string = `${parsedUrl.url}?${stringifiedParams}`;
     this.store.dispatch(feedActions.getFeed({ url: apiUrlWithParams }));
   }
 }
