@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { feedActions } from './store/actions';
 import { combineLatest, Observable } from 'rxjs';
-import { selectFeedData, selectIsLoading, selectError } from './store/reducer';
+import { selectFeedData, selectIsLoading, selectError } from './store/reducers';
 import { GetFeedResponseInterface } from './types/getFeedResponse.interface';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
