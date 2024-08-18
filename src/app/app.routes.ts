@@ -15,4 +15,9 @@ export const appRoutes: Route[] = [
     loadChildren: () =>
       import('./globalFeed/globalFeed.routes').then((m) => m.routes),
   },
+  {
+    path: 'feed',
+    loadChildren: () =>
+      import('./yourFeed/yourFeed.routes').then((m) => m.routes),
+  },
 ];
