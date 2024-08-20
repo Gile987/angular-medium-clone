@@ -69,4 +69,8 @@ export class ArticleComponent implements OnInit {
     this.store.dispatch(articleActions.getArticle({ slug: this.slug }));
     this.data$.subscribe((data) => {});
   }
+
+  deleteArticle(): void {
+    this.store.dispatch(articleActions.deleteArticle({ slug: this.slug }));
+  }
 }
