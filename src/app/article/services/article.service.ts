@@ -9,8 +9,8 @@ import { environment } from '../../../environments/environment.development';
 export class ArticleService {
   constructor(private http: HttpClient) {}
 
-  deleteArticle(slug: string): Observable<{}> {
+  deleteArticle(slug: string): Observable<void> {
     const fullUrl = `${environment.apiUrl}/articles/${slug}`;
-    return this.http.delete(fullUrl);
+    return this.http.delete<void>(fullUrl);
   }
 }
