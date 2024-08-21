@@ -2,7 +2,7 @@
   <div class="article-page">
     <div class="banner">
       <div class="container" *ngIf="data.article">
-        <h1>{{ 'data.article.title' }}</h1>
+        <h1>{{ data.article.title }}</h1>
         <div class="article-meta">
           <a [routerLink]="['/profiles', data.article.author.username]">
             <img [src]="data.article.author.image" />
