@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   imports: [BackendErrorMessages, ReactiveFormsModule, CommonModule],
 })
 export class ArticleFormComponent implements OnInit {
-  @Input() initialValues: ArticleFormValuesInterface | undefined;
+  @Input() initialValues!: ArticleFormValuesInterface;
   @Input() isSubmitting: boolean = false;
   @Input() errors: BackendErrorsInterface | null = null;
 
