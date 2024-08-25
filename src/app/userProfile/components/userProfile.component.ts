@@ -36,7 +36,7 @@ export class UserProfileComponent implements OnInit {
     private store: Store,
     private router: Router
   ) {
-    this.isCurrentUserProfile$ = combineLatest(
+    this.isCurrentUserProfile$ = combineLatest([
       this.store.pipe(
         select(selectCurrentUser),
         filter(
@@ -49,8 +49,8 @@ export class UserProfileComponent implements OnInit {
         filter((userProfile): userProfile is UserProfileInterface =>
           Boolean(userProfile)
         )
-      )
-    ).pipe(
+      ),
+    ]).pipe(
       map(
         ([currentUser, userProfile]: [
           CurrentUserInterface | null,
