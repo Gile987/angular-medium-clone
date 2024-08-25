@@ -32,7 +32,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.form = this.fb.nonNullable.group({
       image: '',
       username: '',
-      biography: '',
+      bio: '',
       email: '',
       password: '',
     });
