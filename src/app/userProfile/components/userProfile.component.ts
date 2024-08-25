@@ -8,7 +8,7 @@ import {
 } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { userProfileActions } from '../store/actions';
-import { combineLatest, filter, map } from 'rxjs';
+import { combineLatest, filter, map, Observable } from 'rxjs';
 import {
   selectError,
   selectIsLoading,
@@ -19,6 +19,7 @@ import { CurrentUserInterface } from '../../shared/types/currentUser.interface';
 import { UserProfileInterface } from '../types/userProfile.interface';
 import { CommonModule } from '@angular/common';
 import { FeedComponent } from '../../shared/components/feed/feed.component';
+import { ExtendedUserProfileStateInterface } from '../types/extendedUserProfileStateInterface';
 
 @Component({
   selector: 'mc-user-profile',
@@ -28,14 +29,24 @@ import { FeedComponent } from '../../shared/components/feed/feed.component';
 })
 export class UserProfileComponent implements OnInit {
   slug: string = '';
-  data$;
-  isCurrentUserProfile$;
+  data$: Observable<ExtendedUserProfileStateInterface> | undefined;
+  isCurrentUserProfile$: Observable<boolean> | undefined;
 
   constructor(
     private route: ActivatedRoute,
     private store: Store,
     private router: Router
-  ) {
+  ) {}
+
+  ngOnInit(): void {
+    this.initializeDataStreams();
+    this.route.params.subscribe((params: Params) => {
+      this.slug = params['slug'];
+      this.fetchUserProfile();
+    });
+  }
+
+  initializeDataStreams(): void {
     this.isCurrentUserProfile$ = combineLatest([
       this.store.pipe(
         select(selectCurrentUser),
@@ -66,13 +77,6 @@ export class UserProfileComponent implements OnInit {
       error: this.store.select(selectError),
       userProfile: this.store.select(selectUserProfileData),
       isCurrentUserProfile: this.isCurrentUserProfile$,
-    });
-  }
-
-  ngOnInit(): void {
-    this.route.params.subscribe((params: Params) => {
-      this.slug = params['slug'];
-      this.fetchUserProfile();
     });
   }
 

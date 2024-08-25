@@ -10,7 +10,7 @@ const initialState: UserProfileStateInterface = {
 };
 
 const userProfileFeature = createFeature({
-  name: 'userPRofile',
+  name: 'userProfile',
   reducer: createReducer(
     initialState,
     on(userProfileActions.getUserProfile, (state) => ({
