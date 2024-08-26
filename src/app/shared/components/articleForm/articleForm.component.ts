@@ -3,13 +3,13 @@ import { ArticleFormValuesInterface } from './types/articleFormValues.interface'
 import { BackendErrorsInterface } from '../../types/backendErrors.interface';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { BackendErrorMessages } from '../backendErrorMessages/backendErrorMessages.component';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'mc-article-form',
   templateUrl: './articleForm.component.html',
   standalone: true,
-  imports: [BackendErrorMessages, ReactiveFormsModule, CommonModule],
+  imports: [BackendErrorMessages, ReactiveFormsModule],
 })
 export class ArticleFormComponent implements OnInit {
   @Input() initialValues!: ArticleFormValuesInterface;
