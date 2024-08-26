@@ -1,4 +1,4 @@
-<ng-container *ngIf="data$ | async as data">
+@if (data$ | async; as data) {
   <nav class="navbar navbar-light">
     <div class="container">
       <a class="navbar-brand" routerLink="/">medium</a>
@@ -6,7 +6,7 @@
         <li class="nav-item">
           <a class="nav-link" routerLink="/">Home</a>
         </li>
-        <ng-container *ngIf="data.currentUser">
+        @if (data.currentUser) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/articles/new">
               <i class="ion-compose"></i>&nbsp;New Article
@@ -21,21 +21,21 @@
             <a
               class="nav-link"
               [routerLink]="['/profiles', data.currentUser.username]"
-            >
+              >
               <img [src]="data.currentUser.image" alt="" class="user-pic" />
               &nbsp;{{ data.currentUser.username }}
             </a>
           </li>
-        </ng-container>
-        <ng-container *ngIf="data.currentUser === null">
+        }
+        @if (data.currentUser === null) {
           <li class="nav-item">
             <a class="nav-link" routerLink="/login">Sign in</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/register">Sign up</a>
           </li>
-        </ng-container>
+        }
       </ul>
     </div>
   </nav>
-</ng-container>
+}
