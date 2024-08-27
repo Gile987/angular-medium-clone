@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
   imports: [ArticleFormComponent, CommonModule],
 })
 export class CreateArticleComponent {
-  initialValues = {
+  initialValues: ArticleFormValuesInterface = {
     title: '',
     description: '',
     body: '',
