@@ -20,7 +20,7 @@ export class CreateArticleService {
         map((response) => response.article),
         catchError((error) => {
           console.error('Error creating article:', error);
-          return throwError(error);
+          return throwError(() => new Error(error));
         })
       );
   }
