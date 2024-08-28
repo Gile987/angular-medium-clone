@@ -24,16 +24,27 @@ import { ArticleInterface } from '../../../shared/types/article.interface';
   imports: [ArticleFormComponent, CommonModule, LoadingComponent],
 })
 export class EditArticleComponent implements OnInit {
-  data$: Observable<{
+  data$!: Observable<{
     isSubmitting: boolean;
     backendErrors: BackendErrorsInterface | null;
     isLoading: boolean;
     initialValues: ArticleFormValuesInterface | null;
   }>;
   slug: string | null;
-  initialValues$: Observable<ArticleFormValuesInterface>;
+  initialValues$!: Observable<ArticleFormValuesInterface>;
 
   constructor(private store: Store, private route: ActivatedRoute) {
+    this.slug = this.route.snapshot.paramMap.get('slug');
+  }
+
+  ngOnInit(): void {
+    this.initializeData();
+    if (this.slug) {
+      this.store.dispatch(editArticleActions.getArticle({ slug: this.slug }));
+    }
+  }
+
+  initializeData(): void {
     this.initialValues$ = this.store.pipe(
       select(selectArticle),
       filter((article): article is ArticleInterface => article !== null),
@@ -53,15 +64,6 @@ export class EditArticleComponent implements OnInit {
       isLoading: this.store.select(selectIsLoading),
       initialValues: this.initialValues$,
     });
-
-    this.slug = this.route.snapshot.paramMap.get('slug');
-  }
-
-  ngOnInit(): void {
-    if (this.slug) {
-      this.store.dispatch(editArticleActions.getArticle({ slug: this.slug }));
-    }
-    return;
   }
 
   onSubmit(articleFormValues: ArticleFormValuesInterface): void {
