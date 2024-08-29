@@ -2,7 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { selectCurrentUser } from '../../../auth/store/reducers';
-import { combineLatest, filter, Observable, Subscription } from 'rxjs';
+import { combineLatest, filter, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CurrentUserInterface } from '../../../shared/types/currentUser.interface';
 import {
   selectIsSubmitting,
@@ -13,6 +14,7 @@ import { BackendErrorMessages } from '../../../shared/components/backendErrorMes
 import { CurrentUserRequestInterface } from '../../../shared/types/currentUserRequest.interface';
 import { authActions } from '../../../auth/store/actions';
 import { BackendErrorsInterface } from '../../../shared/types/backendErrors.interface';
+
 @Component({
   selector: 'mc-settings',
   templateUrl: './settings.component.html',
@@ -20,15 +22,23 @@ import { BackendErrorsInterface } from '../../../shared/types/backendErrors.inte
   imports: [CommonModule, ReactiveFormsModule, BackendErrorMessages],
 })
 export class SettingsComponent implements OnInit, OnDestroy {
-  form: FormGroup;
+  form!: FormGroup;
   currentUser?: CurrentUserInterface;
-  data$: Observable<{
+  data$!: Observable<{
     isSubmitting: boolean;
     backendErrors: BackendErrorsInterface | null;
   }>;
-  currentUserSubscription?: Subscription;
+  private destroy$ = new Subject<void>();
 
-  constructor(private fb: FormBuilder, private store: Store) {
+  constructor(private fb: FormBuilder, private store: Store) {}
+
+  ngOnInit(): void {
+    this.initializeForm();
+    this.initializeDataStream();
+    this.subscribeToCurrentUser();
+  }
+
+  private initializeForm(): void {
     this.form = this.fb.nonNullable.group({
       image: '',
       username: '',
@@ -36,23 +46,29 @@ export class SettingsComponent implements OnInit, OnDestroy {
       email: '',
       password: '',
     });
+  }
 
+  private initializeDataStream(): void {
     this.data$ = combineLatest({
       isSubmitting: this.store.pipe(select(selectIsSubmitting)),
       backendErrors: this.store.pipe(select(selectValidationErrors)),
     });
   }
 
-  ngOnInit() {
-    this.currentUserSubscription = this.store
-      .pipe(select(selectCurrentUser), filter(Boolean))
+  private subscribeToCurrentUser(): void {
+    this.store
+      .pipe(
+        select(selectCurrentUser),
+        filter(Boolean),
+        takeUntil(this.destroy$)
+      )
       .subscribe((currentUser) => {
         this.currentUser = currentUser;
-        this.initializeForm();
+        this.patchFormValues();
       });
   }
 
-  initializeForm(): void {
+  private patchFormValues(): void {
     if (!this.currentUser) {
       throw new Error('User is not defined');
     }
@@ -83,6 +99,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.currentUserSubscription?.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

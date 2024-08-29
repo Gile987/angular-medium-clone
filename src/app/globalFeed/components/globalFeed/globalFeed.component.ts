@@ -16,5 +16,5 @@ import { FeedTogglerComponent } from '../../../shared/components/feedToggler/fee
   ],
 })
 export class GlobalFeedComponent {
-  apiUrl = '/articles';
+  apiUrl: string = '/articles';
 }
