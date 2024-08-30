@@ -8,7 +8,14 @@ import {
 } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { userProfileActions } from '../store/actions';
-import { combineLatest, filter, map, Observable } from 'rxjs';
+import {
+  combineLatest,
+  filter,
+  map,
+  Observable,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import {
   selectError,
   selectIsLoading,
@@ -31,6 +38,7 @@ export class UserProfileComponent implements OnInit {
   slug: string = '';
   data$: Observable<ExtendedUserProfileStateInterface> | undefined;
   isCurrentUserProfile$: Observable<boolean> | undefined;
+  private destroy$ = new Subject<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -40,10 +48,7 @@ export class UserProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeDataStreams();
-    this.route.params.subscribe((params: Params) => {
-      this.slug = params['slug'];
-      this.fetchUserProfile();
-    });
+    this.subscribeToRouteParams();
   }
 
   initializeDataStreams(): void {
@@ -80,6 +85,15 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
+  private subscribeToRouteParams(): void {
+    this.route.params
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((params: Params) => {
+        this.slug = params['slug'];
+        this.fetchUserProfile();
+      });
+  }
+
   fetchUserProfile(): void {
     this.store.dispatch(userProfileActions.getUserProfile({ slug: this.slug }));
   }
@@ -89,5 +103,10 @@ export class UserProfileComponent implements OnInit {
     return isFavorites
       ? `/articles?favorited=${this.slug}`
       : `/articles?author=${this.slug}`;
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }
