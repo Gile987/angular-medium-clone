@@ -23,12 +23,13 @@ export class AddToFavoritesComponent {
         slug: this.articleSlug,
       })
     );
-    if (this.isFavorited) {
-      this.favoritesCount = this.favoritesCount - 1;
-    } else {
-      this.favoritesCount = this.favoritesCount + 1;
-    }
+    this.updateFavoriteState();
+  }
 
+  private updateFavoriteState(): void {
+    this.favoritesCount = this.isFavorited
+      ? this.favoritesCount - 1
+      : this.favoritesCount + 1;
     this.isFavorited = !this.isFavorited;
   }
 }
