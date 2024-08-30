@@ -27,9 +27,12 @@ export class AddToFavoritesComponent {
   }
 
   private updateFavoriteState(): void {
-    this.favoritesCount = this.isFavorited
+    const newFavoritesCount = this.isFavorited
       ? this.favoritesCount - 1
       : this.favoritesCount + 1;
-    this.isFavorited = !this.isFavorited;
+    const newIsFavorited = !this.isFavorited;
+
+    this.favoritesCount = newFavoritesCount;
+    this.isFavorited = newIsFavorited;
   }
 }
