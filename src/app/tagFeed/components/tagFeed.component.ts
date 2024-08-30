@@ -26,6 +26,10 @@ export class TagFeedComponent implements OnInit {
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.subscribeToRouteParams();
+  }
+
+  private subscribeToRouteParams(): void {
     this.route.params
       .pipe(takeUntil(this.destroy$))
       .subscribe((params: Params) => {
