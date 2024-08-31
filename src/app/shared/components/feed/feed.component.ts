@@ -36,10 +36,10 @@ import { AddToFavoritesComponent } from '../addToFavorites/addToFavorites.compon
 export class FeedComponent implements OnInit, OnChanges {
   @Input() apiUrl: string = '';
   limit: number = environment.limit;
-  baseUrl: string;
+  baseUrl: string = '';
   currentPage: number = 0;
 
-  data$: Observable<{
+  data$!: Observable<{
     isLoading: boolean;
     error: string | null;
     feed: GetFeedResponseInterface | null;
@@ -49,16 +49,10 @@ export class FeedComponent implements OnInit, OnChanges {
     private store: Store,
     private router: Router,
     private route: ActivatedRoute
-  ) {
-    this.data$ = combineLatest({
-      isLoading: this.store.select(selectIsLoading),
-      error: this.store.select(selectError),
-      feed: this.store.select(selectFeedData),
-    });
-    this.baseUrl = this.router.url.split('?')[0];
-  }
+  ) {}
 
   ngOnInit(): void {
+    this.initializeData();
     this.route.queryParams.subscribe((params) => {
       this.currentPage = Number(params['page'] || '1');
       this.fetchFeed();
@@ -66,13 +60,18 @@ export class FeedComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    const isapiUrlchanged: boolean =
-      !changes['apiUrl'].firstChange &&
-      changes['apiUrl'].currentValue !== changes['apiUrl'].previousValue;
-
-    if (isapiUrlchanged) {
+    if (changes['apiUrl'] && !changes['apiUrl'].firstChange) {
       this.fetchFeed();
     }
+  }
+
+  private initializeData(): void {
+    this.data$ = combineLatest({
+      isLoading: this.store.select(selectIsLoading),
+      error: this.store.select(selectError),
+      feed: this.store.select(selectFeedData),
+    });
+    this.baseUrl = this.router.url.split('?')[0];
   }
 
   fetchFeed(): void {
