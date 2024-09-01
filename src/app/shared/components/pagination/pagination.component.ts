@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { UtilsService } from '../../services/utils.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
