@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { UtilsService } from '../../services/utils.service';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -9,7 +15,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
 })
-export class PaginationComponent implements OnInit {
+export class PaginationComponent implements OnChanges {
   @Input() total: number = 0;
   @Input() limit: number = 20;
   @Input() currentPage: number = 1;
@@ -20,7 +26,13 @@ export class PaginationComponent implements OnInit {
 
   constructor(private utilsService: UtilsService) {}
 
-  ngOnInit(): void {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['total'] || changes['limit'] || changes['currentPage']) {
+      this.calculatePagination();
+    }
+  }
+
+  private calculatePagination(): void {
     this.pagesCount = Math.ceil(this.total / this.limit);
     this.pages =
       this.pagesCount > 0 ? this.utilsService.range(1, this.pagesCount) : [];
