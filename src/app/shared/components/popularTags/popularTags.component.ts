@@ -20,21 +20,24 @@ import { RouterLink } from '@angular/router';
   imports: [CommonModule, LoadingComponent, ErrorMessageComponent, RouterLink],
 })
 export class PopularTagsComponent implements OnInit {
-  data$: Observable<{
+  data$!: Observable<{
     popularTags: PopularTagType[] | null;
     isLoading: boolean;
     error: string | null;
   }>;
 
-  constructor(private store: Store) {
+  constructor(private store: Store) {}
+
+  ngOnInit(): void {
+    this.store.dispatch(popularTagsActions.getPopularTags());
+    this, this.initializeData();
+  }
+
+  private initializeData(): void {
     this.data$ = combineLatest({
       popularTags: this.store.select(selectPopularTagsData),
       isLoading: this.store.select(selectIsLoading),
       error: this.store.select(selectError),
     });
-  }
-
-  ngOnInit(): void {
-    this.store.dispatch(popularTagsActions.getPopularTags());
   }
 }
