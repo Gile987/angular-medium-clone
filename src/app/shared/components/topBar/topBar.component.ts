@@ -14,11 +14,17 @@ import { CommonModule } from '@angular/common';
   imports: [RouterLink, CommonModule],
 })
 export class TopBarComponent {
-  data$: Observable<{
+  data$!: Observable<{
     currentUser: CurrentUserInterface | null;
   }>;
 
-  constructor(private store: Store) {
+  constructor(private store: Store) {}
+
+  ngOnInit(): void {
+    this.initializeData();
+  }
+
+  private initializeData(): void {
     this.data$ = combineLatest({
       currentUser: this.store.select(selectCurrentUser),
     }).pipe(
