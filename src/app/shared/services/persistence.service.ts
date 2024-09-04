@@ -11,10 +11,10 @@ export class PersistenceService {
       console.error('Error saving data to localStorage', e);
     }
   }
-  get(key: string): unknown {
+  get<T>(key: string): T | null {
     try {
       const localStorageItem = localStorage.getItem(key);
-      return localStorageItem ? JSON.parse(localStorageItem) : null;
+      return localStorageItem ? (JSON.parse(localStorageItem) as T) : null;
     } catch (e) {
       console.error('Error getting data from localStorage', e);
       return null;
